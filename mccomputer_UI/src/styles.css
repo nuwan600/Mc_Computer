@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+
+"styles": [
+    "styles.css",
+    "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+  ],
+  "scripts": [
+    "../node_modules/jquery/dist/jquery.min.js",
+    "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+    "/js/main.js",
+    "/assets/js/angular-1-7-8/angular.js",
+    "/assets/js/angular-1-7-8/ngular-animate.js",
+    "/assets/js/angular-1-7-8/angular-aria.js",
+  ],

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mc Computer</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="/assets/css/style.css" integrity="" crossorigin="anonymous">
+
+  <script src="/assets/js/angular-1-7-8/angular.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angucomplete-alt/2.4.1/angucomplete-alt.min.js"></script>
+  <script src="/assets/js/auto-complete.js"></script>
+
+     <!-- new update -->
+  <script src="/assets/js/main.js" crossorigin="anonymous"></script>
+  <script src="/assets/js/angular-1-7-8/angular-animate.js"></script>
+  <script src="/assets/js/angular-1-7-8/angular-messages.js"></script>
+  <script src="/assets/js/angular-1-7-8/angular-aria.js"></script>
+  <script src="/assets/js/angular-1-7-8/angular-route.js"></script>
+  
+<app-root>Loading...</app-root>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+  
+ 
+<body ng-app="invoicing" ng-controller="InvoiceCtrl" >
+  <div class="container" width="800px" id="invoice" >
+    <div class="row">
+      <div class="col-xs-12 heading">
+        INVOICE
+      </div>
+    </div>
+    <div class="row branding">
+      <div class="col-xs-6">
+        <div class="invoice-number-container">
+          <label for="invoice-number">Invoice #</label><input type="text" id="invoice-number" ng-model="invoice.invoice_number" />
+           <input type="file" id="imgInp" />
+        </div>
+      </div>
+    </div>
+    <label>Chang your billing Address:</label>
+    <div class="row infos">
+      <div class="col-xs-6">
+        <div class="input-container"><input type="text" ng-model="invoice.customer_info.name"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.customer_info.web_link"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.customer_info.address1"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.customer_info.address2"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.customer_info.postal"/></div>
+        <div class="input-container" data-ng-hide='printMode'>
+          <select ng-model='currencySymbol' ng-options='currency.symbol as currency.name for currency in availableCurrencies'></select>
+        </div>
+          
+        <div class="col-xs-5 input-container ">
+        <label>Search Your Item:</label>
+         <angucomplete-alt id="ex1"  
+              placeholder="Select Your Item"
+              selected-object="selectedObj"
+              local-data="nationalities"
+              search-fields="description"
+              title-field="description"
+              minlength="1"
+              inputclass="form-control form-control-small list-group-item"
+              match-class="highlight" />
+               <div class="col-xs-12 add-item-container" ng-hide="printMode">
+                  <div class="row invoice-item">
+                    <div class="col-xs-12 add-item-container" ng-hide="printMode">
+                      <a class="btn btn-primary" href ng-click="addItem()" >[+]</a>
+                    </div>
+                  </div>
+              </div>
+        </div>
+      </div>
+      <div class="col-xs-6 right">
+        <div class="input-container"><input type="text" ng-model="invoice.company_info.name"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.company_info.web_link"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.company_info.address1"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.company_info.address2"/></div>
+        <div class="input-container"><input type="text" ng-model="invoice.company_info.postal"/></div>
+      </div>
+    </div>
+    <div class="items-table">
+      <div class="row header">
+        <div class="col-xs-1">&nbsp;</div>
+        <div class="col-xs-5">Description</div>
+        <div class="col-xs-2">Quantity</div>
+        <div class="col-xs-2">Unit Cost {{currencySymbol}}</div>
+        <div class="col-xs-2 text-right">Total</div>
+      </div>
+      <div class="row invoice-item" ng-repeat="item in invoice.items track by $index" ng-animate="'slide-down'">
+        <div class="col-xs-1 remove-item-container">
+          <a href ng-hide="printMode" ng-click="removeItem(item)" class="btn btn-danger">[X]</a>
+        </div>
+        <div class="col-xs-5 input-container">
+          <input ng-model="item.description" placeholder="Description" source="listOfChoices" />
+        </div>
+        <div class="col-xs-2 input-container">
+          <input ng-model="item.qty" value="1" size="4" ng-required ng-validate="integer" placeholder="Quantity" />
+        </div>
+        <div class="col-xs-2 input-container">
+          <input ng-model="item.cost" value="0.00" ng-required ng-validate="number" size="6" placeholder="Cost" />
+        </div>
+        <div class="col-xs-2 text-right input-container">
+          {{item.cost * item.qty | currency: currencySymbol}}
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-xs-10 text-right">Sub Total</div>
+        <div class="col-xs-2 text-right">{{invoiceSubTotal() | currency: currencySymbol}}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 text-right">Tax(%): <input ng-model="invoice.tax" ng-validate="number" style="width:43px"></div>
+        <div class="col-xs-2 text-right">{{calculateTax() | currency: currencySymbol}}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10 text-right">Grand Total:</div>
+        <div class="col-xs-2 text-right">{{calculateGrandTotal() | currency: currencySymbol}}</div>
+      </div>
+    </div>
+    <div class="row noPrint actions">
+      <a href="#" class="btn btn-primary" ng-show="printMode" ng-click="printInfo()">Print</a>
+      <a href="#" class="btn btn-primary" ng-click="clearLocalStorage()">Reset</a>
+      <a href="#" class="btn btn-primary" ng-hide="printMode" ng-click="printMode = true;">Turn On Print Mode</a>
+      <a href="#" class="btn btn-primary" ng-show="printMode" ng-click="printMode = false;">Turn Off Print Mode</a>
+    </div>
+  </div>
+
+</body>
+</html>
